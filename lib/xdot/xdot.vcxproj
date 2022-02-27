@@ -84,9 +84,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="memstream.h" />
     <ClInclude Include="xdot.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="memstream.c" />
     <ClCompile Include="xdot.c" />
   </ItemGroup>
   <ItemGroup>

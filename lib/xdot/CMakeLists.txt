@@ -2,9 +2,11 @@ add_definitions(-DEXPORT_XDOT)
 
 add_library(xdot SHARED
   # Header files
+  memstream.h
   xdot.h
 
   # Source files
+  memstream.c
   xdot.c
 )
 

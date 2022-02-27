@@ -15,11 +15,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="memstream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="xdot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="memstream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="xdot.c">
       <Filter>Source Files</Filter>
     </ClCompile>

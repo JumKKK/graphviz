@@ -6,6 +6,7 @@ XDOT_VERSION="4:0:0"
 
 pdfdir = $(pkgdatadir)/doc/pdf
 pkginclude_HEADERS = xdot.h
+noinst_HEADERS = memstream.h
 
 AM_CPPFLAGS = -I$(top_srcdir)/lib
 
@@ -26,7 +27,7 @@ else
 pdf =
 endif
 
-libxdot_C_la_SOURCES = xdot.c
+libxdot_C_la_SOURCES = memstream.c xdot.c
 libxdot_la_LDFLAGS = -version-info $(XDOT_VERSION) -no-undefined
 libxdot_la_SOURCES = $(libxdot_C_la_SOURCES)
 
