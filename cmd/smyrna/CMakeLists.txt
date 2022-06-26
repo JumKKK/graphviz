@@ -12,7 +12,8 @@ if(with_smyrna)
   pkg_check_modules(GTS REQUIRED gts)
   pkg_check_modules(XRENDER REQUIRED xrender)
 
-  add_definitions(-DSMYRNA_PATH="${DATA_INSTALL_DIR}/graphviz/smyrna")
+  add_definitions(
+    -DSMYRNA_PATH="${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}/graphviz/smyrna")
 
   add_executable(smyrna
     arcball.h
