@@ -74,6 +74,7 @@ else()
   set(includedir          "${CMAKE_INSTALL_PREFIX}/include")
   set(DATA_INSTALL_DIR    share)
 endif()
+message(FATAL_ERROR "data: ${CMAKE_INSTALL_DATAROOTDIR}")
 
 set(PLUGIN_INSTALL_DIR      ${LIBRARY_INSTALL_DIR}/graphviz)
 set(PKGCONFIG_DIR           ${LIBRARY_INSTALL_DIR}/pkgconfig)
