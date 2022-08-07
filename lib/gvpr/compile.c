@@ -422,9 +422,7 @@ kindOf (Agobj_t* objp)
  * Apply symbol to get field value of objp
  * Assume objp != NULL
  */
-static int lookup(Expr_t * pgm, Agobj_t * objp, Exid_t * sym, Extype_t * v,
-  Gpr_t *state)
-{
+static int lookup(Expr_t *pgm, Agobj_t *objp, Exid_t *sym, Extype_t * v) {
     if (sym->lex == ID) {
 	switch (sym->index) {
 	case M_head:
@@ -1589,7 +1587,7 @@ getval(Expr_t * pgm, Exnode_t * node, Exid_t * sym, Exref_t * ref,
     }
 
     if (objp) {
-	if (lookup(pgm, objp, sym, &v, state)) {
+	if (lookup(pgm, objp, sym, &v)) {
 	    agxbuf xb = {0};
 	    agxbinit(&xb, 0, NULL);
 	    exerror("in expression %s", deparse(pgm, node, &xb));
