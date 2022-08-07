@@ -89,8 +89,7 @@ static Agdisc_t gprDisc = { &AgMemDisc, &AgIdDisc, &gprIoDisc };
  * Return name of object. 
  * Assumes obj !=  NULL
  */
-static char *nameOf(Expr_t * ex, Agobj_t * obj, Sfio_t* tmps)
-{
+static char *nameOf(Expr_t *ex, Agobj_t *obj, agxbuf *tmps) {
     char *s;
     char *key;
     Agedge_t *e;
@@ -103,18 +102,18 @@ static char *nameOf(Expr_t * ex, Agobj_t * obj, Sfio_t* tmps)
     default:			/* edge */
 	e = (Agedge_t *) obj;
 	key = agnameof(AGMKOUT(e));
-	sfputr(tmps, agnameof(AGTAIL(e)), -1);
+	agxbput(tmps, agnameof(AGTAIL(e)));
 	if (agisdirected(agraphof(e)))
-	    sfputr(tmps, "->", -1);
+	    agxbput(tmps, "->");
 	else
-	    sfputr(tmps, "--", -1);
-	sfputr(tmps, agnameof(AGHEAD(e)), -1);
+	    agxbput(tmps, "--");
+	agxbput(tmps, agnameof(AGHEAD(e)));
 	if (key && *key) {
-	    sfputc(tmps, '[');
-	    sfputr(tmps, key, -1);
-	    sfputc(tmps, ']');
+	    agxbputc(tmps, '[');
+	    agxbput(tmps, key);
+	    agxbputc(tmps, ']');
 	}
-	s = exstring(ex, sfstruse(tmps));
+	s = exstring(ex, agxbuse(tmps));
 	break;
     }
     return s;
@@ -444,9 +443,13 @@ static int lookup(Expr_t * pgm, Agobj_t * objp, Exid_t * sym, Extype_t * v,
 		return -1;
 	    }
 	    break;
-	case M_name:
-	    v->string = nameOf(pgm, objp, state->tmp);
+	case M_name: {
+	    agxbuf tmp = {0};
+	    agxbinit(&tmp, 0, NULL);
+	    v->string = nameOf(pgm, objp, &tmp);
+	    agxbfree(&tmp);
 	    break;
+	}
 	case M_indegree:
 	    if (AGTYPE(objp) == AGNODE)
 		v->integer = agdegree(agroot(objp), (Agnode_t *) objp, 1, 0);
@@ -541,9 +544,12 @@ static int lookup(Expr_t * pgm, Agobj_t * objp, Exid_t * sym, Extype_t * v,
 	Agsym_t *gsym = agattrsym(objp, sym->name);
 	if (!gsym) {
 	    gsym = agattr(agroot(agraphof(objp)), AGTYPE(objp), sym->name, "");
+	    agxbuf tmp = {0};
+	    agxbinit(&tmp, 0, NULL);
 	    error(ERROR_WARNING,
 	          "Using value of uninitialized %s attribute \"%s\" of \"%s\"",
-	          kindOf (objp), sym->name, nameOf(pgm, objp, state->tmp));
+	          kindOf (objp), sym->name, nameOf(pgm, objp, &tmp));
+	    agxbfree(&tmp);
 	}
 	v->string = agxget(objp, gsym);
     }
@@ -1335,9 +1341,12 @@ getval(Expr_t * pgm, Exnode_t * node, Exid_t * sym, Exref_t * ref,
 		else {
 		    if (!gsym) {
 	    		gsym = agattr(agroot(agraphof(objp)), AGTYPE(objp), name, "");
+	    		agxbuf tmp = {0};
+	    		agxbinit(&tmp, 0, NULL);
 	    		error(ERROR_WARNING,
 	    		      "Using value of %s uninitialized attribute \"%s\" of \"%s\" in aget()",
-	    		      kindOf (objp), name, nameOf(pgm, objp, state->tmp));
+	    		      kindOf (objp), name, nameOf(pgm, objp, &tmp));
+	    		agxbfree(&tmp);
 		    }
 		    v.string = agxget(objp, gsym);
         	}
@@ -2111,8 +2120,10 @@ static int stringOf(Expr_t * prog, Exnode_t * x, int arg, Exdisc_t* disc)
 	    rv = -1;
 	}
 	else {
-	    Gpr_t* state = disc->user;
-	    x->data.constant.value.string = nameOf(prog, objp, state->tmp);
+	    agxbuf tmp = {0};
+	    agxbinit(&tmp, 0, NULL);
+	    x->data.constant.value.string = nameOf(prog, objp, &tmp);
+	    agxbfree(&tmp);
 	}
     }
     x->type = STRING;
