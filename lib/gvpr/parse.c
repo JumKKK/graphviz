@@ -233,8 +233,7 @@ static case_t parseKind(Sfio_t * str)
  * up to and including a terminating character ec
  * that is not escaped with a back quote.
  */
-static int endString(Sfio_t * ins, agxbuf * outs, char ec)
-{
+static int endString(Sfio_t *ins, agxbuf *outs, int ec) {
     int sline = lineno;
     int c;
 
