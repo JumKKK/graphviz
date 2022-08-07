@@ -781,14 +781,19 @@ char *toLower(Expr_t *pgm, char *src) {
 /* toUpper:
  * Convert characters to uppercase
  */
-char *toUpper(Expr_t * pgm, char *s, Sfio_t* tmps)
-{
-    int c;
+char *toUpper(Expr_t *pgm, char *src) {
 
-    while ((c = *s++))
-	sfputc (tmps, toupper (c));
+  char *dst = exstralloc(pgm, strlen(src) + 1);
+  if (UNLIKELY(dst == NULL)) {
+    return NULL;
+  }
 
-    return exstring(pgm, sfstruse(tmps));
+  for (size_t i = 0; i < strlen(src); ++i) {
+    dst[i] = (char)toupper((int)src[i]);
+  }
+
+  dst[strlen(src)] = '\0';
+  return dst;
 }
 
 /* toHtml:
