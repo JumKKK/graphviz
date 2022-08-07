@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <cgraph/agxbuf.h>
+#include <cgraph/likely.h>
 #include <cgraph/strcasecmp.h>
 #include <cgraph/unreachable.h>
 
@@ -762,14 +763,19 @@ int compare(Agobj_t * l, Agobj_t * r)
 /* toLower:
  * Convert characters to lowercase
  */
-char *toLower(Expr_t * pgm, char *s, Sfio_t* tmps)
-{
-    int c;
+char *toLower(Expr_t *pgm, char *src) {
 
-    while ((c = *s++))
-	sfputc (tmps, tolower (c));
+  char *dst = exstralloc(pgm, strlen(src) + 1);
+  if (UNLIKELY(dst == NULL)) {
+    return NULL;
+  }
 
-    return exstring(pgm, sfstruse(tmps));
+  for (size_t i = 0; i < strlen(src); ++i) {
+    dst[i] = (char)tolower((int)src[i]);
+  }
+
+  dst[strlen(src)] = '\0';
+  return dst;
 }
 
 /* toUpper:
