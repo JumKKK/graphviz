@@ -261,8 +261,7 @@ static int endString(Sfio_t *ins, agxbuf *outs, int ec) {
  * is ignored. Since matching bc-ec pairs might nest,
  * the function is called recursively.
  */
-static int endBracket(Sfio_t * ins, agxbuf * outs, char bc, char ec)
-{
+static int endBracket(Sfio_t *ins, agxbuf *outs, int bc, int ec) {
     int c;
 
     while (true) {
